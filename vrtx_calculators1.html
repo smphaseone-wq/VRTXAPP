@@ -1,0 +1,289 @@
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+.wrap{background:#111827;border-radius:12px;padding:1.75rem 1.5rem;max-width:520px;margin:0 auto;font-family:system-ui,-apple-system,sans-serif}
+.title{font-size:20px;font-weight:500;color:#34d399;text-align:center;margin-bottom:1.5rem;letter-spacing:0.5px}
+.tabs{display:flex;gap:0;margin-bottom:1.75rem;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)}
+.tab{flex:1;padding:10px 0;text-align:center;font-size:13px;font-weight:500;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.03);cursor:pointer;transition:all .2s;border:none;font-family:inherit}
+.tab.active{background:rgba(167,139,250,0.15);color:#c4b5fd}
+.tab:hover:not(.active){background:rgba(255,255,255,0.06)}
+.panel{display:none}
+.panel.active{display:block}
+.field{margin-bottom:1.25rem}
+.field-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.field-label{font-size:13px;color:rgba(255,255,255,0.5);font-weight:400}
+.field-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px}
+.field-vw{display:inline-flex;align-items:center;gap:6px}
+.dp-sep{font-size:12px;color:rgba(255,255,255,0.2)}
+.fi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#f0e6ff;font-size:15px;font-weight:500;padding:3px 7px;text-align:right;font-family:inherit;outline:none;transition:border-color .2s}
+.fi:focus{border-color:#a78bfa}
+.fi-p{width:130px}.fi-r{width:80px}.fi-t{width:100px}.fi-rent{width:120px}.fi-yr{width:70px}.fi-u{width:90px}.fi-dp{width:70px}.fi-dpdol{width:110px}
+.fs{font-size:13px;color:rgba(255,255,255,0.4);margin-left:4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:3px;background:rgba(255,255,255,0.08);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#a78bfa;border:3px solid #111827;cursor:pointer;box-shadow:0 0 0 3px rgba(167,139,250,0.2)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#a78bfa;border:3px solid #111827;cursor:pointer;box-shadow:0 0 0 3px rgba(167,139,250,0.2)}
+input[type=range]::-moz-range-track{height:5px;border-radius:3px;background:rgba(255,255,255,0.08)}
+.sb{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.2);margin-top:5px}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:1.5rem 0}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.section-title{font-size:13px;color:rgba(255,255,255,0.35);font-weight:500;text-transform:uppercase;letter-spacing:1px}
+.section-total{font-size:14px;font-weight:500;color:#c4b5fd}
+.oc{background:rgba(167,139,250,0.06);border-radius:10px;padding:1.15rem 1.25rem;text-align:center;border:1px solid rgba(167,139,250,0.12)}
+.ol{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:rgba(255,255,255,0.4);margin-bottom:5px}
+.ov{font-size:36px;font-weight:500;color:#f0e6ff;letter-spacing:-1px}
+.os{font-size:13px;color:rgba(255,255,255,0.35);margin-top:3px}
+.og{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.om{background:rgba(255,255,255,0.03);border-radius:7px;padding:0.55rem 0.6rem;text-align:center}
+.om .ml{font-size:10px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.7px}
+.om .mv{font-size:16px;font-weight:500;color:#e2e8f0;margin-top:2px}
+.o6{margin-top:12px;background:rgba(167,139,250,0.08);border-radius:7px;padding:0.65rem 0.9rem;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(167,139,250,0.1)}
+.o6 .sl{font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.8px}
+.o6 .sv{font-size:20px;font-weight:500;color:#c4b5fd}
+.dscr-row{margin-top:12px;background:rgba(96,165,250,0.08);border-radius:7px;padding:0.65rem 0.9rem;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(96,165,250,0.1)}
+.dscr-row .dl{font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.8px}
+.dscr-row .dv{font-size:20px;font-weight:500}
+.dscr-good{color:#34d399}
+.dscr-ok{color:#fbbf24}
+.dscr-bad{color:#f87171}
+</style>
+
+<div class="wrap">
+  <div class="title">VRTX Calculators</div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(0)">Hard Money Calculator</button>
+    <button class="tab" onclick="switchTab(1)">Rental Calculator</button>
+  </div>
+
+  <div class="panel active" id="panel-0">
+    <div class="field">
+      <div class="field-header"><div class="field-label">Principal amount</div><div class="field-vw"><input type="text" class="fi fi-p" id="hm-p-in" value="$250,000" inputmode="numeric"/></div></div>
+      <input type="range" id="hm-p-sl" min="10000" max="500000" step="5000" value="250000"/>
+      <div class="sb"><span>$10,000</span><span>$500,000</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Interest rate</div><div class="field-vw"><input type="text" class="fi fi-r" id="hm-r-in" value="5.00" inputmode="decimal"/><span class="fs">%</span></div></div>
+      <input type="range" id="hm-r-sl" min="0.25" max="28" step="0.25" value="5"/>
+      <div class="sb"><span>0.25%</span><span>28%</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Annual taxes</div><div class="field-vw"><input type="text" class="fi fi-t" id="hm-t-in" value="$3,000" inputmode="numeric"/></div></div>
+      <input type="range" id="hm-t-sl" min="0" max="10000" step="100" value="3000"/>
+      <div class="sb"><span>$0</span><span>$10,000</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Annual insurance</div><div class="field-vw"><input type="text" class="fi fi-t" id="hm-i-in" value="$1,200" inputmode="numeric"/></div></div>
+      <input type="range" id="hm-i-sl" min="0" max="10000" step="100" value="1200"/>
+      <div class="sb"><span>$0</span><span>$10,000</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-head">
+      <div class="section-title">Utility estimates</div>
+      <div class="section-total" id="hm-util-total">$350/mo</div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Water</div><div class="field-vw"><input type="text" class="fi fi-u" id="hm-water-in" value="$75" inputmode="numeric"/><span class="fs">/mo</span></div></div>
+      <input type="range" id="hm-water-sl" min="0" max="500" step="5" value="75"/>
+      <div class="sb"><span>$0</span><span>$500</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Gas</div><div class="field-vw"><input type="text" class="fi fi-u" id="hm-gas-in" value="$100" inputmode="numeric"/><span class="fs">/mo</span></div></div>
+      <input type="range" id="hm-gas-sl" min="0" max="500" step="5" value="100"/>
+      <div class="sb"><span>$0</span><span>$500</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Electric</div><div class="field-vw"><input type="text" class="fi fi-u" id="hm-elec-in" value="$175" inputmode="numeric"/><span class="fs">/mo</span></div></div>
+      <input type="range" id="hm-elec-sl" min="0" max="500" step="5" value="175"/>
+      <div class="sb"><span>$0</span><span>$500</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="oc">
+      <div class="ol">Monthly holding cost payment</div>
+      <div class="ov" id="hm-monthly">$1,742</div>
+      <div class="os" id="hm-annual">$20,900 per year</div>
+      <div class="og">
+        <div class="om"><div class="ml">Daily</div><div class="mv" id="hm-daily">$57</div></div>
+        <div class="om"><div class="ml">Weekly</div><div class="mv" id="hm-weekly">$402</div></div>
+      </div>
+      <div class="o6"><div class="sl">6-month total</div><div class="sv" id="hm-six">$10,450</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-1">
+    <div class="field">
+      <div class="field-header"><div class="field-label">Principal amount</div><div class="field-vw"><input type="text" class="fi fi-p" id="tm-p-in" value="$250,000" inputmode="numeric"/></div></div>
+      <input type="range" id="tm-p-sl" min="10000" max="1000000" step="5000" value="250000"/>
+      <div class="sb"><span>$10,000</span><span>$1,000,000</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header">
+        <div class="field-label">Down payment</div>
+        <div class="field-vw">
+          <input type="text" class="fi fi-dpdol" id="tm-dpdol-in" value="$50,000" inputmode="numeric"/>
+          <span class="dp-sep">or</span>
+          <input type="text" class="fi fi-dp" id="tm-dp-in" value="20" inputmode="numeric"/><span class="fs">%</span>
+        </div>
+      </div>
+      <input type="range" id="tm-dp-sl" min="0" max="100" step="1" value="20"/>
+      <div class="sb"><span>0%</span><span>100%</span></div>
+      <div class="field-sub" id="tm-dp-detail">$200,000 loan amount</div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Interest rate</div><div class="field-vw"><input type="text" class="fi fi-r" id="tm-r-in" value="5.00" inputmode="decimal"/><span class="fs">%</span></div></div>
+      <input type="range" id="tm-r-sl" min="0.25" max="15" step="0.25" value="5"/>
+      <div class="sb"><span>0.25%</span><span>15%</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Annual taxes</div><div class="field-vw"><input type="text" class="fi fi-t" id="tm-t-in" value="$3,000" inputmode="numeric"/></div></div>
+      <input type="range" id="tm-t-sl" min="0" max="10000" step="100" value="3000"/>
+      <div class="sb"><span>$0</span><span>$10,000</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Annual insurance</div><div class="field-vw"><input type="text" class="fi fi-t" id="tm-i-in" value="$1,200" inputmode="numeric"/></div></div>
+      <input type="range" id="tm-i-sl" min="0" max="10000" step="100" value="1200"/>
+      <div class="sb"><span>$0</span><span>$10,000</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Monthly rent (for DSCR)</div><div class="field-vw"><input type="text" class="fi fi-rent" id="tm-rent-in" value="$2,000" inputmode="numeric"/></div></div>
+      <input type="range" id="tm-rent-sl" min="0" max="10000" step="50" value="2000"/>
+      <div class="sb"><span>$0</span><span>$10,000</span></div>
+    </div>
+    <div class="field">
+      <div class="field-header"><div class="field-label">Amortization</div><div class="field-vw"><input type="text" class="fi fi-yr" id="tm-a-in" value="30" inputmode="numeric"/><span class="fs">yrs</span></div></div>
+      <input type="range" id="tm-a-sl" min="5" max="40" step="5" value="30"/>
+      <div class="sb"><span>5 yrs</span><span>40 yrs</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="oc">
+      <div class="ol">Monthly PITI payment</div>
+      <div class="ov" id="tm-monthly">$1,424</div>
+      <div class="os" id="tm-annual">$17,083 per year</div>
+      <div class="dscr-row"><div class="dl">DSCR</div><div class="dv dscr-good" id="tm-dscr">1.40</div></div>
+      <div class="og">
+        <div class="om"><div class="ml">Daily</div><div class="mv" id="tm-daily">$47</div></div>
+        <div class="om"><div class="ml">Weekly</div><div class="mv" id="tm-weekly">$329</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function fmt(n){return '$'+Math.round(n).toLocaleString('en-US')}
+  function fillSl(el,min,max){var p=((el.value-min)/(max-min))*100;el.style.background='linear-gradient(to right,#a78bfa 0%,#a78bfa '+p+'%,rgba(255,255,255,0.08) '+p+'%,rgba(255,255,255,0.08) 100%)'}
+
+  function bindField(slId,inId,min,max,step,isDollar,suffix,cb){
+    var sl=document.getElementById(slId),inp=document.getElementById(inId);
+    var val=Number(sl.value);
+    function format(v){
+      if(isDollar) return '$'+Math.round(v).toLocaleString('en-US');
+      if(suffix==='%') return step>=1?String(Math.round(v)):v.toFixed(2);
+      return String(Math.round(v));
+    }
+    function sync(fromSl){
+      if(fromSl){val=Number(sl.value);inp.value=format(val)}
+      else{
+        var raw=isDollar?inp.value.replace(/[^0-9]/g,''):inp.value;
+        var v=isDollar?parseInt(raw,10):parseFloat(raw);
+        if(isNaN(v))v=min;
+        v=Math.round(v/step)*step;
+        v=Math.max(min,Math.min(max,v));
+        val=v;sl.value=v;inp.value=format(v);
+      }
+      fillSl(sl,min,max);cb(val)
+    }
+    sl.addEventListener('input',function(){sync(true)});
+    inp.addEventListener('focus',function(){if(isDollar)inp.value=inp.value.replace(/[^0-9]/g,'')});
+    inp.addEventListener('blur',function(){sync(false)});
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter')inp.blur()});
+    fillSl(sl,min,max);
+  }
+
+  var hmP=250000,hmR=5,hmT=3000,hmI=1200,hmWater=75,hmGas=100,hmElec=175;
+  bindField('hm-p-sl','hm-p-in',10000,500000,5000,true,'$',function(v){hmP=v;calcHM()});
+  bindField('hm-r-sl','hm-r-in',0.25,28,0.25,false,'%',function(v){hmR=v;calcHM()});
+  bindField('hm-t-sl','hm-t-in',0,10000,100,true,'$',function(v){hmT=v;calcHM()});
+  bindField('hm-i-sl','hm-i-in',0,10000,100,true,'$',function(v){hmI=v;calcHM()});
+  bindField('hm-water-sl','hm-water-in',0,500,5,true,'$',function(v){hmWater=v;calcHM()});
+  bindField('hm-gas-sl','hm-gas-in',0,500,5,true,'$',function(v){hmGas=v;calcHM()});
+  bindField('hm-elec-sl','hm-elec-in',0,500,5,true,'$',function(v){hmElec=v;calcHM()});
+
+  function calcHM(){
+    var interest=hmP*(hmR/100)/12;
+    var mTax=hmT/12,mIns=hmI/12;
+    var utils=hmWater+hmGas+hmElec;
+    var total=interest+mTax+mIns+utils;
+    var annual=total*12;
+    document.getElementById('hm-util-total').textContent=fmt(utils)+'/mo';
+    document.getElementById('hm-monthly').textContent=fmt(total);
+    document.getElementById('hm-annual').textContent=fmt(annual)+' per year';
+    document.getElementById('hm-daily').textContent=fmt(annual/365);
+    document.getElementById('hm-weekly').textContent=fmt(annual/52);
+    document.getElementById('hm-six').textContent=fmt(total*6);
+  }
+  calcHM();
+
+  var tmP=250000,tmDP=20,tmR=5,tmA=30,tmT=3000,tmI=1200,tmRent=2000;
+  var dpSlider=document.getElementById('tm-dp-sl');
+  var dpPctIn=document.getElementById('tm-dp-in');
+  var dpDolIn=document.getElementById('tm-dpdol-in');
+
+  function dpFromPct(pct){
+    tmDP=Math.max(0,Math.min(100,Math.round(pct)));
+    var dolAmt=Math.round(tmP*tmDP/100);
+    dpSlider.value=tmDP;
+    dpPctIn.value=String(tmDP);
+    dpDolIn.value='$'+dolAmt.toLocaleString('en-US');
+    fillSl(dpSlider,0,100);
+    document.getElementById('tm-dp-detail').textContent=fmt(tmP-dolAmt)+' loan amount';
+    calcTM();
+  }
+
+  function dpFromDol(dol){
+    dol=Math.max(0,Math.min(tmP,dol));
+    tmDP=tmP>0?Math.round(dol/tmP*100):0;
+    dpSlider.value=tmDP;
+    dpPctIn.value=String(tmDP);
+    dpDolIn.value='$'+dol.toLocaleString('en-US');
+    fillSl(dpSlider,0,100);
+    document.getElementById('tm-dp-detail').textContent=fmt(tmP-dol)+' loan amount';
+    calcTM();
+  }
+
+  dpSlider.addEventListener('input',function(){dpFromPct(Number(dpSlider.value))});
+  dpPctIn.addEventListener('blur',function(){var v=parseInt(dpPctIn.value,10);if(isNaN(v))v=0;dpFromPct(v)});
+  dpPctIn.addEventListener('keydown',function(e){if(e.key==='Enter')dpPctIn.blur()});
+  dpDolIn.addEventListener('focus',function(){dpDolIn.value=dpDolIn.value.replace(/[^0-9]/g,'')});
+  dpDolIn.addEventListener('blur',function(){var v=parseInt(dpDolIn.value.replace(/[^0-9]/g,''),10);if(isNaN(v))v=0;dpFromDol(v)});
+  dpDolIn.addEventListener('keydown',function(e){if(e.key==='Enter')dpDolIn.blur()});
+  fillSl(dpSlider,0,100);
+
+  bindField('tm-p-sl','tm-p-in',10000,1000000,5000,true,'$',function(v){tmP=v;dpFromPct(tmDP)});
+  bindField('tm-r-sl','tm-r-in',0.25,15,0.25,false,'%',function(v){tmR=v;calcTM()});
+  bindField('tm-t-sl','tm-t-in',0,10000,100,true,'$',function(v){tmT=v;calcTM()});
+  bindField('tm-i-sl','tm-i-in',0,10000,100,true,'$',function(v){tmI=v;calcTM()});
+  bindField('tm-rent-sl','tm-rent-in',0,10000,50,true,'$',function(v){tmRent=v;calcTM()});
+  bindField('tm-a-sl','tm-a-in',5,40,5,false,'yr',function(v){tmA=v;calcTM()});
+
+  function calcTM(){
+    var loan=tmP-Math.round(tmP*tmDP/100);
+    var mRate=tmR/100/12,n=tmA*12;
+    var mPrinInt=mRate>0?loan*(mRate*Math.pow(1+mRate,n))/(Math.pow(1+mRate,n)-1):loan/n;
+    var mTax=tmT/12,mIns=tmI/12;
+    var total=mPrinInt+mTax+mIns;
+    var annual=total*12;
+    var dscr=total>0?tmRent/total:0;
+    document.getElementById('tm-monthly').textContent=fmt(total);
+    document.getElementById('tm-annual').textContent=fmt(annual)+' per year';
+    document.getElementById('tm-daily').textContent=fmt(annual/365);
+    document.getElementById('tm-weekly').textContent=fmt(annual/52);
+    var dscrEl=document.getElementById('tm-dscr');
+    dscrEl.textContent=dscr.toFixed(2);
+    dscrEl.className='dv '+(dscr>=1.25?'dscr-good':dscr>=1?'dscr-ok':'dscr-bad');
+  }
+  calcTM();
+
+  window.switchTab=function(i){
+    document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('active',j===i)});
+    document.querySelectorAll('.panel').forEach(function(p,j){p.classList.toggle('active',j===i)});
+  }
+})();
+</script>
